@@ -1,10 +1,9 @@
 package builderDesignPatternExample;
 
-public class Package{
-    private final double mWeight; //required
-    private final String mDestinationCity; //required
-    private final boolean mPriority; //required
-    private final String mOriginCity; //optional
+
+public class Package extends PostOfficeItem{
+
+    private final double mWeight;
 
     private Package(PackageBuilder builder){
         this.mWeight = builder.mWeight;
@@ -30,25 +29,31 @@ public class Package{
     }
 
     @Override
+    public double calculatePrice() {
+        if(isPriority()) return (getWeight() / 2) + 5;
+        else return getWeight() / 2;
+    }
+
+    @Override
     public String toString(){
         return "Package weight: " + getWeight() + "\nPriority: " + isPriority() + "\nOrigin: " +
-                getOriginCity() + "\nDestination: " + getDestinationCity() + "\n";
+                getOriginCity() + "\nDestination: " + getDestinationCity() + "\nTotal cost: " + calculatePrice()  + "\n";
     }
 
     //BUILDER CLASS
     public static class PackageBuilder{
-        private final double mWeight;
+        private double mWeight;
         private final String mDestinationCity;
         private final boolean mPriority;
-        private String mOriginCity;
+        private final String mOriginCity;
 
-        public PackageBuilder(double weight, String destination, boolean priority){
-            this.mWeight = weight;
+        public PackageBuilder(String origin, String destination, boolean priority){
+            this.mOriginCity = origin;
             this.mDestinationCity = destination;
             this.mPriority = priority;
         }
-        public PackageBuilder setOriginCity(String origin){
-            this.mOriginCity = origin;
+        public PackageBuilder setWeight(double weight){
+            this.mWeight = weight;
             return this;
         }
 
